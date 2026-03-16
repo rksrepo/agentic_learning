@@ -51,3 +51,5 @@ Guardrails ensure your agents behave safely, consistently, and within your inten
 
 
 ![img_6.png](img_6.png)
+
+Definition of Agentic workflows: An agent run tools in a loop to achieve a goal (in 2026)
