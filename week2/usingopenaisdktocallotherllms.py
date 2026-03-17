@@ -9,35 +9,27 @@ from rich.console import Console
 load_dotenv(override=True)
 console = Console()
 
-openrouter_api_key = os.getenv("OPEN_ROUTER_API_KEY")
+claude_api_key = os.getenv("ANTHROPIC_API_KEY")
 
-if openrouter_api_key:
-    print("OpenRouter API key loaded")
+if claude_api_key:
+    print("Anthropic api key loaded")
 else:
-    print("OpenRouter API key does not exist")
+    print("Anthropic api key does not exist")
 
 message = "Give me a fun fact about Chennai, which hardly people know, even people of Chennai"
 
-OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
+ANTHROPIC_BASE_URL = "https://api.anthropic.com/v1/"
 
-# ✅ OpenRouter client
-openrouter_client = AsyncOpenAI(
-    base_url=OPENROUTER_BASE_URL,
-    api_key=openrouter_api_key,
-)
+anthropic_client = AsyncOpenAI(base_url=ANTHROPIC_BASE_URL, api_key=claude_api_key)
 
-# ✅ Gemini model via OpenRouter
-gemini_model = OpenAIChatCompletionsModel(
-    model="google/gemini-2.0-flash-001",
-    openai_client=openrouter_client
-)
+anthropic_model = OpenAIChatCompletionsModel(model="claude-haiku-4-5", openai_client=anthropic_client)
 
 instructions = "You give fun facts to users. Give short and crisp fun facts, detailing city asked and origin."
 
-agent = Agent("Gemini Agent, talking about fun facts", instructions=instructions, model=gemini_model)
+agent = Agent("Claude Agent, talking about fun facts", instructions=instructions, model=anthropic_model)
 
 async def main():
-    with trace("Gemini Fun Fact"):
+    with trace("Claude Fun Fact"):
         result = await Runner.run(agent, message)
 
         console.print("\n[bold green]Response:[/bold green]")
